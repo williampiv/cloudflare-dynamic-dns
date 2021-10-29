@@ -1,0 +1,5 @@
+[yourdomain.com]
+records = ["subdomain_to_update", "second_thing_to_update"]
+
+[yourotherdomain.org]
+records = ["more_domain_to_update"]

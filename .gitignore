@@ -3,7 +3,8 @@ __pycache__
 .DS_Store
 
 # secret ini files
-config.ini
+cloudflare_creds.ini
+dns.ini
 
 # original sad bash-script that we are replacing with this project
 update-ip.sh
