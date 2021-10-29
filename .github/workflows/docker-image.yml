@@ -1,0 +1,43 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches: [ main ]
+
+permissions:
+  actions: read
+  contents: read
+  packages: write
+  pull-requests: read
+
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+
+jobs:
+  build-and-push:
+
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+    - name: get date for tag
+      id: tag_vars
+      run: echo ::set-output name=tag::$(date +%m%d%Y)
+    - name: checkout repo
+      uses: actions/checkout@v2
+    - name: Log in to GHCR
+      uses: docker/login-action@f054a8b539a109f9f41c372932f1ae047eff08c9
+      with:
+        registry: ${{ env.REGISTRY }}
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+    - name: Build & Push Image
+      uses: docker/build-push-action@v2.7.0
+      with:
+        context: .
+        push: true
+        tags: ${{ env.REGISTRY }}/${{ github.repository }}:${{ steps.tag_vars.outputs.tag }}, ${{ env.REGISTRY }}/${{ github.repository }}:latest
