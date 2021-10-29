@@ -1,0 +1,14 @@
+# usual stuff
+__pycache__
+.DS_Store
+
+# secret ini files
+config.ini
+
+# original sad bash-script that we are replacing with this project
+update-ip.sh
+
+# virtual envs (venvs)
+.venv
+venv
+virtualenv
