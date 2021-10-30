@@ -1,0 +1,32 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: cf-dyn-update
+  namespace: ops
+spec:
+  schedule: "* */12 * * *"
+  successfulJobsHistoryLimit: 5
+  failedJobsHistoryLimit: 5
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: cf-dyndns-update
+            image: ghcr.io/williampiv/cloudflare-dynamic-dns:latest
+            imagePullPolicy: IfNotPresent
+            volumeMounts:
+              - mountPath: "/cloudflare_creds.ini"
+                name: cf-dyndns-configs
+                subPath: cloudflare_creds.ini
+                readOnly: true
+              - mountPath: "/dns.ini"
+                name: cf-dyndns-configs
+                subPath: dns.ini
+                readOnly: true
+          restartPolicy: OnFailure
+          volumes:
+            - name: cf-dyndns-configs
+              secret:
+                secretName: cf-dyndns-configs
+
